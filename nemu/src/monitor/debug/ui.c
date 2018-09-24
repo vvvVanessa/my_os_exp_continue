@@ -107,7 +107,7 @@ static int cmd_x(char *args) {
             }
         }
         for (int i = 0; i < N; i++) {
-            printf("%-10ux%u\n", addr, paddr_read(addr, 4));
+            printf("%-10x%u\n", addr, paddr_read(addr, 4));
         }
     }
     return 0;
