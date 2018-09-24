@@ -87,12 +87,12 @@ static struct {
   { "help", "Display informations about all supported commands", cmd_help },
   { "c", "Continue the execution of the program", cmd_c },
   { "q", "Exit NEMU", cmd_q },
-  { "si [N]", "suspend execution after N step, default N=1", cmd_si},
-  { "info SUBCMD", "info r: print information of registers; info w: print information of watch-points", cmd_info },
-  { "p EXPR", "calculate EXPR", cmd_p },
-  { "x N EXPR", "calculate EXPR", cmd_x },
-  { "w EXPR", "suspend execution when the value of EXPR changes", cmd_w },
-  { "d N", "delete watch point N", cmd_d },
+  { "si", "suspend execution after N step, default N=1", cmd_si},
+  { "info", "info r: print information of registers; info w: print information of watch-points", cmd_info },
+  { "p", "calculate EXPR", cmd_p },
+  { "x", "calculate EXPR", cmd_x },
+  { "w", "suspend execution when the value of EXPR changes", cmd_w },
+  { "d", "delete watch point N", cmd_d },
 
   /* TODO: Add more commands */
   /* DONE: 2018-9-24 18:23*/
