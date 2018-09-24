@@ -1,6 +1,7 @@
 #include "monitor/monitor.h"
 #include "monitor/expr.h"
 #include "monitor/watchpoint.h"
+#include "cpu/reg.h"
 #include "nemu.h"
 
 #include <stdlib.h>
@@ -53,10 +54,18 @@ static int cmd_si(char *args) {
 }
 
 static int cmd_info(char *args) {
-    if (!(*args == 'r' || *args == 'w')) {
+    if (!(strcmp(args, "r") == 0 || strcmp(args, "w") == 0)) {
         printf("wrong argument.\n");
     } else {
-        //TODO
+
+        if (strcmp(args, "r") == 0) {
+            for (int i = 0; i < 8; i++) {
+                printf("%s: %ud", reg_name(i, 4), reg_l(i));
+                printf("%s: %ud", reg_name(i, 2), reg_w(i));
+                printf("%s: %ud", reg_name(i, 1), reg_b(i));
+            }
+        } else if (strcmp(args, "w") == 0) {
+        }
     }
     return 0;
 }
