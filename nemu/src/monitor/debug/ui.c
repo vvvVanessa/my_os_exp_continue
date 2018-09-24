@@ -61,8 +61,8 @@ static int cmd_info(char *args) {
         if (strcmp(args, "r") == 0) {
             for (int i = 0; i < 8; i++) {
                 printf("%s: %ud\n", reg_name(i, 4), reg_l(i));
-                printf("%s: %ud\n", reg_name(i, 2), reg_w(i));
-                printf("%s: %ud\n", reg_name(i, 1), reg_b(i));
+                printf("%s:  %ud\n", reg_name(i, 2), reg_w(i));
+                printf("%s:  %ud\n", reg_name(i, 1), reg_b(i));
             }
         } else if (strcmp(args, "w") == 0) {
         }
