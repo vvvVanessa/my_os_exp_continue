@@ -4,6 +4,7 @@
 #include "nemu.h"
 
 #include <stdlib.h>
+#include <string.h>
 #include <readline/readline.h>
 #include <readline/history.h>
 
@@ -36,6 +37,46 @@ static int cmd_q(char *args) {
   return -1;
 }
 
+static int cmd_si(char *args) {
+    int N;
+    if(args == NULL) {
+        N = 1;
+    } else {
+        if(strlen(args) > 1) {
+            printf("N must be positive and less than 10\n");
+            return 0;
+        }
+        N = *args - '0';
+    }
+    cpu_exec(N);
+    return 0;
+}
+
+static int cmd_info(char *args) {
+    if (!(*args == 'r' || *args == 'w')) {
+        printf("wrong argument.\n");
+    } else {
+        //TODO
+    }
+    return 0;
+}
+
+static int cmd_p(char *args) {
+    return 0;
+}
+
+static int cmd_x(char *args) {
+    return 0;
+}
+
+static int cmd_w(char *args) {
+    return 0;
+}
+
+static int cmd_d(char *args) {
+    return 0;
+}
+
 static int cmd_help(char *args);
 
 static struct {
@@ -46,9 +87,15 @@ static struct {
   { "help", "Display informations about all supported commands", cmd_help },
   { "c", "Continue the execution of the program", cmd_c },
   { "q", "Exit NEMU", cmd_q },
+  { "si [N]", "suspend execution after N step, default N=1", cmd_si},
+  { "info SUBCMD", "info r: print information of registers; info w: print information of watch-points", cmd_info },
+  { "p EXPR", "calculate EXPR", cmd_p },
+  { "x N EXPR", "calculate EXPR", cmd_x },
+  { "w EXPR", "suspend execution when the value of EXPR changes", cmd_w },
+  { "d N", "delete watch point N", cmd_d },
 
   /* TODO: Add more commands */
-
+  /* DONE: 2018-9-24 18:23*/
 };
 
 #define NR_CMD (sizeof(cmd_table) / sizeof(cmd_table[0]))
