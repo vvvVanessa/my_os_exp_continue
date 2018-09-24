@@ -2,6 +2,7 @@
 #include "monitor/expr.h"
 #include "monitor/watchpoint.h"
 #include "cpu/reg.h"
+#include "memory.h"
 #include "nemu.h"
 
 #include <stdlib.h>
@@ -75,6 +76,41 @@ static int cmd_p(char *args) {
 }
 
 static int cmd_x(char *args) {
+    char *arg0 = strtok(NULL, " ");
+    if (arg0 == NULL) {
+        printf("wrong expression");
+        return 0;
+    }
+    int N = atoi(arg0);
+    char *arg1 = strtok(NULL, " ");
+    if (arg1 == NULL) 
+        return 0;
+    int len = strlen(arg1);
+    for (int i = 0; i < len; i++) {
+        if (arg1[i] >= 'A' && arg1[i] <= 'Z')
+            arg1[i] += 32;
+    }
+
+    paddr_t addr = 0;
+    uint32_t base = 0;
+    if (arg1[0] == '0' && arg1[1] == 'x') {
+        for (int i = len - 1; i > 1; i--) {
+            if (arg1[i] >= 'a' && arg1[i] <= 'f') {
+                addr += (arg1[i] - 'a') << (base << 2);
+                ++base;
+            } else if (arg1[i] >= '0' && arg1[i] <= '9'){
+                addr += (arg1[i] - '0') << (base << 2);
+                ++base;
+            } else {
+                printf("wrong expression.\n");
+                return 0;
+            }
+        }
+        for (int i = 0; i < N; i++) {
+            printf("%-10s%u\n", arg1, paddr_read(addr, 4));
+            addr++;
+        }
+    }
     return 0;
 }
 
