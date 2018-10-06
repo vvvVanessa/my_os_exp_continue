@@ -72,6 +72,10 @@ static int cmd_info(char *args) {
 }
 
 static int cmd_p(char *args) {
+    bool success;
+    uint32_t val = expr(args, &success);
+    if (success) 
+        printf("%d\n", val);
     return 0;
 }
 
