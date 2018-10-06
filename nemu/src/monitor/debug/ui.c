@@ -58,7 +58,6 @@ static int cmd_info(char *args) {
     if (!(strcmp(args, "r") == 0 || strcmp(args, "w") == 0)) {
         printf("wrong argument.\n");
     } else {
-
         if (strcmp(args, "r") == 0) {
             for (int i = 0; i < 8; i++) {
                 printf("%-6s%u\n", reg_name(i, 4), reg_l(i));
@@ -72,17 +71,44 @@ static int cmd_info(char *args) {
 }
 
 static int cmd_p(char *args) {
-    bool success;
+    if (args == NULL) {
+        printf("No expression. \n");
+        return 0;
+    }
+    bool success = true;
     uint32_t val = expr(args, &success);
-    if (success) 
+    if (success) {
         printf("%d\n", val);
+    } 
     return 0;
 }
 
 static int cmd_x(char *args) {
     char *arg0 = strtok(NULL, " ");
     if (arg0 == NULL) {
-        printf("wrong expression");
+        printf("Wrong expression");
+        return 0;
+    }
+    int N = atoi(arg0);
+    char *arg1 = strtok(NULL, " ");
+    if (arg1 == NULL)
+        return 0;
+    bool success = true;
+    paddr_t addr = expr(arg1, &success);
+    if (success) {
+        for (int i = 0; i < N; i++) {
+            printf("0x%-10x0x%x\n", addr, paddr_read(addr, 4));
+            ++addr;
+        }
+    }
+    return 0;
+}
+/* cmd_x previous version */
+/*
+static int cmd_x(char *args) {
+    char *arg0 = strtok(NULL, " ");
+    if (arg0 == NULL) {
+        printf("Wrong expression");
         return 0;
     }
     int N = atoi(arg0);
@@ -106,7 +132,7 @@ static int cmd_x(char *args) {
                 addr += (arg1[i] - '0') << (base << 2);
                 ++base;
             } else {
-                printf("wrong expression.\n");
+                printf("Wrong expression.\n");
                 return 0;
             }
         }
@@ -117,12 +143,37 @@ static int cmd_x(char *args) {
     }
     return 0;
 }
+*/
 
 static int cmd_w(char *args) {
+    if (args == NULL) {
+        printf("Wrong expression.\n");
+        return 0;
+    } else {
+        WP* wp = new_wp();
+        setup_wp(wp, args);
+        printf("get wp %d \n", wp -> NO);
+    }
     return 0;
 }
 
 static int cmd_d(char *args) {
+    if (args == NULL) {
+        printf("Wrong expression.\n");
+        return 0;
+    } else {
+        bool success = true;
+        uint32_t no = expr(args, &success);
+        if (!success) {
+            printf("Wrong expression.\n");
+            return 0;
+        } else if (no < 0 || no >= NR_WP) {
+            printf("Number out of range. \n");
+            return 0;
+        }
+        free_wp( no);
+        printf("Free %d wp success. \n", no);
+    }
     return 0;
 }
 
